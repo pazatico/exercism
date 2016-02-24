@@ -4,13 +4,15 @@ class Prime
 
   class << self
     def nth(count)
-      raise ArgumentError, "The primes count must be at least 1" if count < 1
+      count > 0 or raise ArgumentError, "The primes count must be at least 1"
+      
       cache_next_prime while @primes.size < count
       @primes[count - 1]
     end
     
     def prime?(candidate)
-      raise ArgumentError, "The number to test must be at least 2" if candidate < 2
+      candidate > 1 or raise ArgumentError, "The number to test must be at least 2"
+      
       cache_next_prime while @primes.last < candidate
       @primes.include? candidate
     end
