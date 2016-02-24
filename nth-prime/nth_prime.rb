@@ -3,25 +3,29 @@ class Prime
   @primes = [2, 3]
 
   class << self
-    def nth(n)
-      raise ArgumentError if n < 1
-
-      find_next_prime while @primes.size < n
-      @primes[n - 1]
+    def nth(count)
+      raise ArgumentError, "The primes count must be at least 1" if count < 1
+      cache_next_prime while @primes.size < count
+      @primes[count - 1]
+    end
+    
+    def prime?(candidate)
+      raise ArgumentError, "The number to test must be at least 2" if candidate < 2
+      cache_next_prime while @primes.last < candidate
+      @primes.include? candidate
     end
 
     private
 
-    def find_next_prime
+    def cache_next_prime
       x = @primes.last + 2
-      x += 2 until is_next_prime? x
+      x += 2 until next_prime? x
       @primes << x
-      x
     end
 
-    def is_next_prime?(n)
-      factors = @primes.take_while { |p| p**2 <= n }
-      factors.all? { |f| n % f != 0 }
+    def next_prime?(candidate)
+      factors = @primes.take_while { |prime| prime**2 <= candidate }
+      factors.all? { |factor| candidate % factor != 0 }
     end
   end
 end
